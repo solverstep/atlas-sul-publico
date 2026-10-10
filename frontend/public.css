@@ -28,6 +28,12 @@
   justify-content: flex-start;
 }
 
+#map-canvas {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 @media (max-width: 880px) {
   .public-mode-pill {
     font-size: 0.5rem;

@@ -21,6 +21,13 @@ Sem essa variável, a execução local administrativa continua funcionando como 
 - O histórico público remove justificativas e avisos internos, mantendo somente os campos territoriais necessários à auditoria pública.
 - O modo público usa o mapa provincial consolidado e o GeoJSON municipal simplificado. A geometria municipal integral permanece fora do pacote público.
 
+## Interação em dispositivos móveis
+
+- O mapa trata o toque curto como seleção e só inicia o deslocamento depois de um movimento deliberado do dedo.
+- O teste de seleção considera a densidade real de pixels da tela, inclusive em celulares de alta resolução.
+- Toques em limites estreitos recebem uma pequena tolerância espacial; as geometrias oficiais não são alteradas.
+- Cancelamentos de gesto e perda de captura do ponteiro encerram a interação sem deixar o mapa preso em estado de arraste.
+
 ## Arquivos que devem ir ao repositório de hospedagem
 
 - `backend/`
