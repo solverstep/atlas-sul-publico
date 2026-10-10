@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Fontes e relatórios de trabalho permanecem apenas na cópia administrativa.
+data/original/
+data/source-archives/
+source-package/
+reports/
+
+# A versão pública usa somente o GeoJSON simplificado de exibição.
+data/processed/municipios_geometry_full.geojson
+
+# Arquivos temporários e locais.
+*.tmp
+*.log
+.env

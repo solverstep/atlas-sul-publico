@@ -1,0 +1,76 @@
+{
+  "auditado_em": "2026-10-10T17:44:29.066327+00:00",
+  "status_cadastro": "base do Work anterior, não homologada neste Atlas",
+  "status_malha_municipal": "não disponível — requer importação oficial IBGE",
+  "origens": [
+    {
+      "arquivo": "Cadastro_Cantonal_RS_SC_PR_validado_IBGE.xlsx",
+      "bytes": 89843,
+      "sha256": "bf8136793b121e01b06fce6e685b766f6e61651f3bc7bee6c1258e0b5c2e12de"
+    },
+    {
+      "arquivo": "auditoria_contiguidade.csv",
+      "bytes": 14723,
+      "sha256": "c6b54e8dae548a6127a83d30b44ddfdd4ccbaee9990cef76ac3b9e44a1266e49"
+    },
+    {
+      "arquivo": "cantoes_PR_2024.geojson",
+      "bytes": 3396138,
+      "sha256": "a41fb01f3fa2926bd7aa37aebdc24b7cbfc63fa5883fc15454b444522686f811"
+    },
+    {
+      "arquivo": "cantoes_RS_2024.geojson",
+      "bytes": 7615989,
+      "sha256": "ce1c5833055c6fcbb75a7eac35e4d7feba8d227ccc169e3b4eb8d69bd76dd29e"
+    },
+    {
+      "arquivo": "cantoes_SC_2024.geojson",
+      "bytes": 21242833,
+      "sha256": "4718aae990a10e2fcbead0511186bd0a86b54b38e96bbb24ea495b9cd3919f76"
+    },
+    {
+      "arquivo": "comparativo_RS_SC_Work.csv",
+      "bytes": 67,
+      "sha256": "36db60eda156bdc4ded040577e541282ea54c5b85dfa172f5d22a47d9763d48d"
+    },
+    {
+      "arquivo": "manifesto_auditoria.json",
+      "bytes": 3468,
+      "sha256": "7a22105966e861383321fbcefa2ce0fd8c8c6057d1c9ae5ef0f51a693be83273"
+    },
+    {
+      "arquivo": "manifesto_final.json",
+      "bytes": 3776,
+      "sha256": "737ce4a3896bce1206f079f100511dcc3e4e97ea8154f619844d7c76ba4e0ab2"
+    },
+    {
+      "arquivo": "municipios_por_cantao_3_estados.csv",
+      "bytes": 147361,
+      "sha256": "baf19e3c6f163f60578cdf5b3692ffb031e4f0f5037ef4ba5816c6554a137f72"
+    },
+    {
+      "arquivo": "pendencias_mobilidade.csv",
+      "bytes": 3053,
+      "sha256": "732b212d7b8ef681c0a27c2b520eb2f2fdf05490eb4c631247ec5404a145c73e"
+    },
+    {
+      "arquivo": "resumo_63_cantoes.csv",
+      "bytes": 3814,
+      "sha256": "86a2d6f1aaae76570d9b87bb7e824e90b49d99f873295859c1743877dddc6865"
+    }
+  ],
+  "contagens": {
+    "municipios": 1191,
+    "provincias": 63,
+    "estados": {
+      "RS": 497,
+      "SC": 295,
+      "PR": 399
+    }
+  },
+  "populacao_2022": {
+    "RS": 10882965,
+    "SC": 7610361,
+    "PR": 11444380
+  }
+}

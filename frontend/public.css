@@ -1,0 +1,37 @@
+.public-mode-pill {
+  display: none;
+  align-items: center;
+  border: 1px solid #5f79ad;
+  border-radius: 24px;
+  color: #dce9ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 7px 11px;
+}
+
+.public-read-only .public-mode-pill {
+  display: inline-flex;
+}
+
+.public-read-only .admin-action,
+.public-read-only .status-group,
+.public-read-only .block-heading:has(+ .status-group),
+.public-read-only #go-edit,
+.public-read-only #preview-transfer,
+.public-read-only #confirm-transfer,
+.public-read-only #cancel-transfer {
+  display: none !important;
+}
+
+.public-read-only .sidebar-bottom {
+  justify-content: flex-start;
+}
+
+@media (max-width: 880px) {
+  .public-mode-pill {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    padding: 0.32rem 0.45rem;
+  }
+}
