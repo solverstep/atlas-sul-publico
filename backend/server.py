@@ -101,7 +101,14 @@ def geofeature(pid,geom):
  return {'type':'Feature','properties':P_META[pid],'geometry':mapping(simplified)}
 
 def provinces_geo(snap):
- if PUBLIC_READ_ONLY:return BASE_MAP
+ if PUBLIC_READ_ONLY:
+  if snap['sequence']==0:return BASE_MAP
+  # Public snapshots must ship their matching reviewed map, never a stale baseline.
+  version=snap['version']
+  if version!=f"v1.0.{int(snap['sequence'])}":raise HTTPException(503,'Versão cartográfica inválida')
+  path=PROCESSED/f'distritos_map_{version}.geojson'
+  if not path.exists():raise HTTPException(503,'Mapa desta versão territorial indisponível')
+  return json.loads(path.read_text('utf-8'))
  if geom_store() is None:
   if snap['sequence']==0 or snap['assignments']=={m['code']:m['province_id'] for m in MUNICIPALITIES}:
    return BASE_MAP
@@ -161,7 +168,7 @@ def api_provinces():return summary(current())
 @app.get('/api/municipalities')
 def api_municipalities():
  s=current()
- return [{**m,'province_id':s['assignments'][m['code']]} for m in MUNICIPALITIES]
+ return [{**m,'province_id':s['assignments'][m['code']],'province_name':P_META[s['assignments'][m['code']]]['name']} for m in MUNICIPALITIES]
 @app.get('/api/map/provinces')
 def api_map_provinces():return provinces_geo(current())
 @app.get('/api/map/municipalities')
@@ -230,7 +237,7 @@ def api_review(pid:str,req:ReviewReq):
 def api_export(kind:str):
  s=current()
  if kind=='json':
-  content=[{**m,'province_id':s['assignments'][m['code']]} for m in MUNICIPALITIES]
+  content=[{**m,'province_id':s['assignments'][m['code']],'province_name':P_META[s['assignments'][m['code']]]['name']} for m in MUNICIPALITIES]
   return JSONResponse(content,headers={'Content-Disposition':'attachment; filename="cadastro_distrital.json"'})
  if kind=='csv':
   f=io.StringIO();wr=csv.writer(f,delimiter=';');wr.writerow(['UF','Codigo_IBGE','Municipio','Distrito','Populacao_2022','Area_km2'])
