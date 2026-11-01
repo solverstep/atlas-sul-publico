@@ -1,5 +1,6 @@
 {
-  "version": "v1.0.1",
-  "sequence": 1,
-  "sha256": "c609177a51840348e9729804a881dbc8e27ad40c7aaa250b5f7384dd5ce368c1"
+  "version": "v1.0.2",
+  "sequence": 2,
+  "sha256": "d7942b0571c2735ab3e3a68ab157fe57a1e4312028a945f166a965a5ec534fff",
+  "district_names_sha256": "02c78d951af16973e344e2115151e4a368e695cb126f8904ca82b26afa0d2065"
 }

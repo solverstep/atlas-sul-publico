@@ -56,7 +56,14 @@ def current():
  ptr=json.loads(POINTER.read_text('utf-8'))
  obj=json.loads((VERSIONS/(ptr['version']+'.json')).read_text('utf-8'))
  if obj['sha256']!=sha({'assignments':obj['assignments'],'reviews':obj['reviews']}):raise RuntimeError('Integridade do snapshot comprometida')
+ if 'district_names' in obj:
+  if set(obj['district_names'])!=set(P_META) or obj.get('district_names_sha256')!=sha(obj['district_names']):raise RuntimeError('Integridade dos nomes distritais comprometida')
+  if any(obj['district_names'][p]!=P_META[p]['name'] for p in ('RS01','SC01','PR01')):raise RuntimeError('Nome metropolitano alterado')
  return obj
+
+def metadata_for(snap):
+ names=snap.get('district_names',{})
+ return {pid:{**meta,'name':names.get(pid,meta['name'])} for pid,meta in P_META.items()}
 
 def check(assign):
  if set(assign)!=set(BY_CODE):raise ValueError('Faltam ou sobram códigos IBGE')
@@ -71,7 +78,7 @@ def check(assign):
 def summary(snap):
  group=defaultdict(list)
  for m in MUNICIPALITIES:group[snap['assignments'][m['code']]].append(m)
- return [{**meta,'count':len(group[pid]),'population':sum(x['pop'] for x in group[pid]),'area':round(sum(x['area'] for x in group[pid]),3),'density':round(sum(x['pop'] for x in group[pid])/sum(x['area'] for x in group[pid]),2),'review':snap['reviews'].get(pid,'nao_revisada')} for pid,meta in sorted(P_META.items())]
+ return [{**meta,'count':len(group[pid]),'population':sum(x['pop'] for x in group[pid]),'area':round(sum(x['area'] for x in group[pid]),3),'density':round(sum(x['pop'] for x in group[pid])/sum(x['area'] for x in group[pid]),2),'review':snap['reviews'].get(pid,'nao_revisada')} for pid,meta in sorted(metadata_for(snap).items())]
 
 def geom_store():
  global _GEO
@@ -168,7 +175,8 @@ def api_provinces():return summary(current())
 @app.get('/api/municipalities')
 def api_municipalities():
  s=current()
- return [{**m,'province_id':s['assignments'][m['code']],'province_name':P_META[s['assignments'][m['code']]]['name']} for m in MUNICIPALITIES]
+ meta=metadata_for(s)
+ return [{**m,'province_id':s['assignments'][m['code']],'province_name':meta[s['assignments'][m['code']]]['name']} for m in MUNICIPALITIES]
 @app.get('/api/map/provinces')
 def api_map_provinces():return provinces_geo(current())
 @app.get('/api/map/municipalities')
@@ -237,7 +245,8 @@ def api_review(pid:str,req:ReviewReq):
 def api_export(kind:str):
  s=current()
  if kind=='json':
-  content=[{**m,'province_id':s['assignments'][m['code']],'province_name':P_META[s['assignments'][m['code']]]['name']} for m in MUNICIPALITIES]
+  meta=metadata_for(s)
+  content=[{**m,'province_id':s['assignments'][m['code']],'province_name':meta[s['assignments'][m['code']]]['name']} for m in MUNICIPALITIES]
   return JSONResponse(content,headers={'Content-Disposition':'attachment; filename="cadastro_distrital.json"'})
  if kind=='csv':
   f=io.StringIO();wr=csv.writer(f,delimiter=';');wr.writerow(['UF','Codigo_IBGE','Municipio','Distrito','Populacao_2022','Area_km2'])
