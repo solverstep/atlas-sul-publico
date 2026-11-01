@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-A versão pública permite consultar o mapa, as 63 Províncias e os 1.191 municípios sem conceder ao visitante qualquer capacidade de alterar vínculos territoriais, estados de revisão ou histórico.
+A versão pública permite consultar o mapa, as 63 Distritos e os 1.191 municípios sem conceder ao visitante qualquer capacidade de alterar vínculos territoriais, estados de revisão ou histórico.
 
 Ela é ativada pela variável de ambiente:
 
@@ -19,7 +19,7 @@ Sem essa variável, a execução local administrativa continua funcionando como 
 - A API responde `403` a prévias de transferência e a todas as rotas de escrita.
 - Swagger, ReDoc e o documento OpenAPI ficam desativados no modo público.
 - O histórico público remove justificativas e avisos internos, mantendo somente os campos territoriais necessários à auditoria pública.
-- O modo público usa o mapa provincial consolidado e o GeoJSON municipal simplificado. A geometria municipal integral permanece fora do pacote público.
+- O modo público usa o mapa distrital consolidado e o GeoJSON municipal simplificado. A geometria municipal integral permanece fora do pacote público.
 
 ## Interação em dispositivos móveis
 
@@ -52,14 +52,19 @@ O arquivo `render.yaml` prepara um Web Service gratuito com:
 - modo público somente leitura ativado;
 - publicação automática desativada para exigir decisão explícita antes de cada nova implantação.
 
-O endereço final será um subdomínio da própria Render, semelhante a:
+Endereço público do serviço consultado em 01/11/2026:
 
 ```text
-https://atlas-territorial-sul.onrender.com
+https://atlas-sul-publico.onrender.com/
 ```
 
-O nome exato depende da disponibilidade no momento da criação do serviço.
+A publicação desta correção deve ocorrer no serviço existente; o domínio permanece o mesmo.
 
 ## Limite deliberado
 
 Esta edição não é uma plataforma colaborativa. Para permitir edição pública ou administrativa pela internet serão necessários autenticação, autorização por função, armazenamento persistente e trilha de auditoria em banco de dados.
+
+
+## Nomenclatura distrital
+
+A interface, as mensagens e os nomes dos downloads usam Distrito e Distritos. Os identificadores técnicos legados `province_id`, `province_name`, `/api/provinces` e os caminhos dos dados são mantidos por compatibilidade. A revisão não altera geometrias, municípios, vínculos, snapshots ou permissões. Para desfazer a alteração, reimplantar o commit anterior c45847b6ea7197ed2628366a0f177747ec1daae3.

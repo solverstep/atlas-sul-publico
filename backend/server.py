@@ -63,9 +63,9 @@ def check(assign):
  if len(assign)!=1191 or len(P_META)!=63:raise ValueError('Contagem territorial inválida')
  count=Counter()
  for code,p in assign.items():
-  if p not in P_META or P_META[p]['uf']!=BY_CODE[code]['uf']:raise ValueError(f'Província de UF incorreta: {code} {p}')
+  if p not in P_META or P_META[p]['uf']!=BY_CODE[code]['uf']:raise ValueError(f'Distrito de UF incorreta: {code} {p}')
   count[p]+=1
- if not all(count[p]>0 for p in P_META):raise ValueError('Uma Província ficaria sem municípios')
+ if not all(count[p]>0 for p in P_META):raise ValueError('Um Distrito ficaria sem municípios')
  return count
 
 def summary(snap):
@@ -118,9 +118,9 @@ def components(pid,assign):
 
 def evaluate_transfer(code,dest,snap):
  if code not in BY_CODE:raise HTTPException(404,'Código IBGE municipal inexistente')
- if dest not in P_META:raise HTTPException(400,'Província de destino inexistente')
+ if dest not in P_META:raise HTTPException(400,'Distrito de destino inexistente')
  src=snap['assignments'][code]
- if src==dest:raise HTTPException(400,'Município já pertence à Província de destino')
+ if src==dest:raise HTTPException(400,'Município já pertence ao Distrito de destino')
  if P_META[dest]['uf']!=BY_CODE[code]['uf']:raise HTTPException(400,'Transferência entre Estados Constituintes é proibida')
  if sum(p==src for p in snap['assignments'].values())<=1:raise HTTPException(400,'A origem ficaria sem municípios')
  if geom_store() is None:raise HTTPException(409,'Faltam malhas municipais oficiais. Importe os três ZIPs IBGE 2024 antes de transferir.')
@@ -133,7 +133,7 @@ def evaluate_transfer(code,dest,snap):
  check(trial)
  after={src:components(src,trial),dest:components(dest,trial)}
  warnings=[]
- if not contiguous:warnings.append('Município não possui fronteira linear com a Província de destino')
+ if not contiguous:warnings.append('Município não possui fronteira linear com o Distrito de destino')
  for p in (src,dest):
   if after[p]>before[p]:warnings.append(f'{p}: componentes geográficos aumentaram de {before[p]} para {after[p]} (revisar ilhas, lagoas, costa e contiguidade)')
   elif after[p]>1:warnings.append(f'{p}: área permanece com {after[p]} componentes (descontinuidade ou ilhas, conferir manualmente)')
@@ -220,7 +220,7 @@ def api_review(pid:str,req:ReviewReq):
  require_write_access()
  with LOCK:
   s=current()
-  if pid not in P_META:raise HTTPException(404,'Província inexistente')
+  if pid not in P_META:raise HTTPException(404,'Distrito inexistente')
   if s['version']!=req.expected_version:raise HTTPException(409,'Versão desatualizada')
   if req.status not in ['nao_revisada','em_revisao','validada','divergencia']:raise HTTPException(400,'Status inválido')
   reviews=dict(s['reviews']);reviews[pid]=req.status
@@ -231,13 +231,13 @@ def api_export(kind:str):
  s=current()
  if kind=='json':
   content=[{**m,'province_id':s['assignments'][m['code']]} for m in MUNICIPALITIES]
-  return JSONResponse(content,headers={'Content-Disposition':'attachment; filename="cadastro_provincial.json"'})
+  return JSONResponse(content,headers={'Content-Disposition':'attachment; filename="cadastro_distrital.json"'})
  if kind=='csv':
-  f=io.StringIO();wr=csv.writer(f,delimiter=';');wr.writerow(['UF','Codigo_IBGE','Municipio','Provincia','Populacao_2022','Area_km2'])
+  f=io.StringIO();wr=csv.writer(f,delimiter=';');wr.writerow(['UF','Codigo_IBGE','Municipio','Distrito','Populacao_2022','Area_km2'])
   for m in MUNICIPALITIES:wr.writerow([m['uf'],m['code'],m['name'],s['assignments'][m['code']],m['pop'],str(m['area']).replace('.',',')])
-  return Response('\ufeff'+f.getvalue(),media_type='text/csv; charset=utf-8',headers={'Content-Disposition':'attachment; filename="cadastro_provincial.csv"'})
+  return Response('\ufeff'+f.getvalue(),media_type='text/csv; charset=utf-8',headers={'Content-Disposition':'attachment; filename="cadastro_distrital.csv"'})
  if kind=='geojson':
-  return JSONResponse(provinces_geo(s),headers={'Content-Disposition':'attachment; filename="provincias_sul.geojson"'})
+  return JSONResponse(provinces_geo(s),headers={'Content-Disposition':'attachment; filename="distritos_sul.geojson"'})
  if kind=='audit':return JSONResponse(api_history(),headers={'Content-Disposition':'attachment; filename="historico_auditoria.json"'})
  if kind=='audit-csv':
   f=io.StringIO();wr=csv.writer(f,delimiter=';');wr.writerow(['Versao','DataHora','Acao','Municipio','Codigo_IBGE','Origem','Destino','Motivo','SHA256'])
