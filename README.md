@@ -1,5 +1,11 @@
 # Atlas Territorial do Sul — versão local 1.1
 
+Proposta territorial corrigida **v1.0.3**, em avaliação da reforma estatutária:
+Maquiné-RS (4311775) integra **RS04 — Litoral Norte**. A correção preserva os
+demais vínculos da v1.0.2 e o histórico. Ver
+[registro e limites](docs/CORRECAO_MAQUINE_v1.0.3.md). Este repositório e seus
+snapshots não representam homologação ou vigência institucional.
+
 **Projeto de regionalização hipotética, não oficial.** Três Estados Constituintes (RS, SC, PR), 63 Distritos (incluindo três Metrópoles Autônomas) e 1.191 municípios.
 
 ## O que já funciona neste pacote
